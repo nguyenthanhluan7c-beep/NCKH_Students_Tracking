@@ -1,0 +1,101 @@
+﻿student_id,name,class,faculty,gpa
+SV001,Sinh viên 001,KHMT19-01,CNTT,3.46
+SV002,Sinh viên 002,KHMT19-02,Kinh tế,2.44
+SV003,Sinh viên 003,KHMT19-01,CNTT,3.2
+SV004,Sinh viên 004,KHMT19-01,CNTT,2.36
+SV005,  Sinh viên 005  ,KHMT19-02,CNTT,3.15
+SV006,Sinh viên 006,KT19-01,Kinh tế,2.96
+SV007,Sinh viên 007,CNTT19-01,CNTT,3.49
+SV008,Sinh viên 008,KHMT19-02,Cơ khí,2.78
+SV009,Sinh viên 009,KHMT19-02,Kinh tế,3.83
+SV010,Sinh viên 010,CNTT19-01,CNTT,2.36
+SV011,Sinh viên 011,KHMT19-01,Điện - Điện tử,3.64
+SV012,,CNTT19-01,CNTT,3.44
+SV013,Sinh viên 013,KHMT19-01,Cơ khí,2.33
+SV014,Sinh viên 014,CNTT19-01,Điện - Điện tử,3.18
+SV015,Sinh viên 015,KHMT19-01,CNTT,3.32
+SV016,Sinh viên 016,CNTT19-01,CNTT,3.65
+SV017,Sinh viên 017,KHMT19-01,Cơ khí,2.67
+SV018,Sinh viên 018,CNTT19-01,Kinh tế,2.83
+SV019,Sinh viên 019,KHMT19-02,Điện - Điện tử,3.39
+SV020,Sinh viên 020,KHMT19-01,Kinh tế,3.11
+SV021,Sinh viên 021,KHMT19-02,Kinh tế,2.99
+SV022,Sinh viên 022,CNTT19-01,Kinh tế,3.36
+SV023,Sinh viên 023,KHMT19-01,Kinh tế,3.6
+SV024,Sinh viên 024,CNTT19-01,Cơ khí,2.66
+SV025,Sinh viên 025,KHMT19-02,Điện - Điện tử,abc
+SV026,Sinh viên 026,KT19-01,Cơ khí,3.7
+SV027,Sinh viên 027,KT19-01,Kinh tế,2.65
+SV028,Sinh viên 028,KHMT19-02,Điện - Điện tử,3.47
+SV029,Sinh viên 029,KT19-01,Cơ khí,2.82
+SV030,Sinh viên 030,KHMT19-02,Cơ khí,2.35
+SV031,Sinh viên 031,KHMT19-01,CNTT,2.46
+SV032,Sinh viên 032,KHMT19-02,Cơ khí,3.21
+SV033,Sinh viên 033,KT19-01,Cơ khí,3.21
+SV034,Sinh viên 034,KT19-01,Điện - Điện tử,3.85
+SV035,Sinh viên 035,KHMT19-01,CNTT,3.36
+SV036,Sinh viên 036,CNTT19-01,Điện - Điện tử,2.39
+SV037,Sinh viên 037,KT19-01,Kinh tế,2.97
+SV038,Sinh viên 038,CNTT19-01,Kinh tế,3.06
+SV039,Sinh viên 039,KHMT19-01,Điện - Điện tử,3.63
+SV001,Sinh viên 040,KHMT19-02,Kinh tế,2.84
+SV041,Sinh viên 041,KHMT19-02,CNTT,3.22
+SV042,Sinh viên 042,KT19-01,CNTT,2.39
+SV043,Sinh viên 043,CNTT19-01,Điện - Điện tử,2.61
+SV044,Sinh viên 044,KHMT19-02,CNTT,2.35
+SV045,Sinh viên 045,KT19-01,CNTT,3.86
+SV046,Sinh viên 046,KHMT19-02,Kinh tế,3.32
+SV047,Sinh viên 047,KHMT19-02,Điện - Điện tử,3.1
+SV048,Sinh viên 048,KT19-01,Kinh tế,3.78
+SV049,Sinh viên 049,KHMT19-02,Điện - Điện tử,2.88
+SV050,Sinh viên 050,CNTT19-01,Cơ khí,3.73
+SV051,Sinh viên 051,KT19-01,CNTT,2.62
+SV052,Sinh viên 052,KHMT19-01,Điện - Điện tử,2.24
+SV053,Sinh viên 053,KHMT19-02,Kinh tế,2.21
+SV054,Sinh viên 054,KHMT19-01,Kinh tế,2.31
+SV055,Sinh viên 055,KHMT19-01,Điện - Điện tử,2.32
+SV056,Sinh viên 056,KHMT19-02,Điện - Điện tử,3.34
+SV057,Sinh viên 057,KHMT19-02,Kinh tế,3.43
+SV058,Sinh viên 058,KT19-01,Kinh tế,3.53
+SV059,Sinh viên 059,KT19-01,Kinh tế,2.36
+SV060,Sinh viên 060,KT19-01,Điện - Điện tử,2.92
+SV061,Sinh viên 061,KT19-01,CNTT,3.34
+SV062,Sinh viên 062,KHMT19-01,CNTT,2.88
+SV063,Sinh viên 063,CNTT19-01,CNTT,2.62
+SV064,Sinh viên 064,KHMT19-02,Cơ khí,2.44
+SV065,Sinh viên 065,KHMT19-02,Điện - Điện tử,2.99
+SV066,Sinh viên 066,KHMT19-01,Cơ khí,3.57
+SV067,Sinh viên 067,KHMT19-01,CNTT,3.31
+SV068,Sinh viên 068,KHMT19-01, cntt ,3.77
+SV069,Sinh viên 069,KHMT19-02,Kinh tế,2.89
+SV070,Sinh viên 070,KT19-01,Kinh tế,3.67
+SV071,Sinh viên 071,KHMT19-01,Kinh tế,2.84
+SV072,Sinh viên 072,KT19-01,Điện - Điện tử,3.78
+SV073,Sinh viên 073,KT19-01,Điện - Điện tử,2.92
+SV074,Sinh viên 074,KT19-01,Kinh tế,2.52
+SV075,Sinh viên 075,KHMT19-02,CNTT,3.18
+SV076,Sinh viên 076,KHMT19-01,Điện - Điện tử,2.3
+SV077,Sinh viên 077,KT19-01,Kinh tế,2.3
+SV078,Sinh viên 078,KHMT19-01,Kinh tế,2.32
+SV079,Sinh viên 079,KHMT19-01,Kinh tế,2.89
+SV080,Sinh viên 080,KHMT19-02,CNTT,3.25
+SV081,Sinh viên 081,KT19-01,Điện - Điện tử,3.79
+SV082,Sinh viên 082,KHMT19-02,Điện - Điện tử,2.61
+SV083,Sinh viên 083,KT19-01,Kinh tế,3.34
+SV084,Sinh viên 084,CNTT19-01,Cơ khí,2.74
+SV085,Sinh viên 085,KHMT19-01,CNTT,2.98
+SV086,Sinh viên 086,KHMT19-01,CNTT,3.11
+SV087,Sinh viên 087,CNTT19-01,Kinh tế,3.79
+SV088,Sinh viên 088,KHMT19-01,Kinh tế,2.83
+SV089,Sinh viên 089,KHMT19-02,Cơ khí,3.62
+SV090,Sinh viên 090,CNTT19-01,CNTT,3.34
+SV091,Sinh viên 091,CNTT19-01,CNTT,3.8
+SV092,Sinh viên 092,KHMT19-02,Điện - Điện tử,2.4
+SV093,Sinh viên 093,KHMT19-01,Kinh tế,2.66
+SV094,Sinh viên 094,KHMT19-02,Điện - Điện tử,2.55
+SV095,Sinh viên 095,CNTT19-01,Cơ khí,2.63
+SV096,Sinh viên 096,KHMT19-01,CNTT,3.28
+SV097,Sinh viên 097,CNTT19-01,CNTT,2.21
+SV098,Sinh viên 098,KHMT19-02,Điện - Điện tử,2.47
+SV099,Sinh viên 099,KT19-01,Cơ khí,3.15
+SV100,Sinh viên 100,KHMT19-01,CNTT,3.81

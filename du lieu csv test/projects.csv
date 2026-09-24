@@ -1,0 +1,81 @@
+﻿project_id,project_name,field,leader_id,status
+DT001,Đề tài nghiên cứu 001,Data Science,SV020,Tạm dừng
+DT002,Đề tài nghiên cứu 002,AI,SV048,Tạm dừng
+DT003,Đề tài nghiên cứu 003,Web,SV019,Hoàn thành
+DT004,  Đề tài nghiên cứu 004  ,Blockchain,SV006,Hoàn thành
+DT005,Đề tài nghiên cứu 005,IoT,SV006,Hoàn thành
+DT006,Đề tài nghiên cứu 006,Blockchain,SV088,Đang thực hiện
+DT007,Đề tài nghiên cứu 007,Data Science,SV014,Hoàn thành
+DT008,Đề tài nghiên cứu 008,Web,SV053,Tạm dừng
+DT009,Đề tài nghiên cứu 009,Data Science,SV020,Đang thực hiện
+DT010,Đề tài nghiên cứu 010,,SV023,Hoàn thành
+DT011,Đề tài nghiên cứu 011,AI,SV023,Tạm dừng
+DT012,Đề tài nghiên cứu 012,IoT,SV053,Tạm dừng
+DT013,Đề tài nghiên cứu 013,Data Science,SV032,Hoàn thành
+DT014,Đề tài nghiên cứu 014,Blockchain,SV090,Đang thực hiện
+DT015,Đề tài nghiên cứu 015,Digital Twin,SV005,Hoàn thành
+DT016,Đề tài nghiên cứu 016,Blockchain,SV026,Hoàn thành
+DT017,Đề tài nghiên cứu 017,IoT,SV040,Đang thực hiện
+DT018,Đề tài nghiên cứu 018,Blockchain,SV004,Tạm dừng
+DT019,Đề tài nghiên cứu 019,Blockchain,SV999,Hoàn thành
+DT020,Đề tài nghiên cứu 020,IoT,SV009,Hoàn thành
+DT021,Đề tài nghiên cứu 021,IoT,SV083,Tạm dừng
+DT022,Đề tài nghiên cứu 022,Digital Twin,SV087,Tạm dừng
+DT023,Đề tài nghiên cứu 023,IoT,SV004,Đang thực hiện
+DT024,Đề tài nghiên cứu 024,IoT,SV023,Tạm dừng
+DT025,Đề tài nghiên cứu 025,IoT,SV005,Đang thực hiện
+DT026,Đề tài nghiên cứu 026,Web,SV056,Hoàn thành
+DT027,Đề tài nghiên cứu 027,Data Science,SV041,Hoàn thành
+DT028,Đề tài nghiên cứu 028,Web,SV066,Đang thực hiện
+DT029,Đề tài nghiên cứu 029,Digital Twin,SV074,Đang thực hiện
+DT001,Đề tài nghiên cứu 030,IoT,SV006,Tạm dừng
+DT031,Đề tài nghiên cứu 031,Digital Twin,SV001,Tạm dừng
+DT032,Đề tài nghiên cứu 032,Web,SV088,Tạm dừng
+DT033,Đề tài nghiên cứu 033,Data Science,SV095,Tạm dừng
+DT034,Đề tài nghiên cứu 034,Blockchain,SV047,Hoàn thành
+DT035,Đề tài nghiên cứu 035,AI,SV086,Hoàn thành
+DT036,Đề tài nghiên cứu 036,Web,SV041,Tạm dừng
+DT037,Đề tài nghiên cứu 037,AI,SV093,Hoàn thành
+DT038,Đề tài nghiên cứu 038,Web,SV040,Tạm dừng
+DT039,Đề tài nghiên cứu 039,Digital Twin,SV042,Hoàn thành
+DT040,Đề tài nghiên cứu 040,Data Science,SV038,Tạm dừng
+DT041,Đề tài nghiên cứu 041,Blockchain,SV025,Hoàn thành
+DT042,Đề tài nghiên cứu 042,Data Science,SV049,Tạm dừng
+DT043,Đề tài nghiên cứu 043,Data Science,SV023,Tạm dừng
+DT044,Đề tài nghiên cứu 044,Web,SV039,Hoàn thành
+DT045,Đề tài nghiên cứu 045,Web,SV001,Chưa xác định
+DT046,Đề tài nghiên cứu 046,IoT,SV027,Hoàn thành
+DT047,Đề tài nghiên cứu 047,Web,SV078,Tạm dừng
+DT048,Đề tài nghiên cứu 048,IoT,SV060,Hoàn thành
+DT049,Đề tài nghiên cứu 049,Digital Twin,SV087,Đang thực hiện
+DT050,Đề tài nghiên cứu 050,Web,SV061,Tạm dừng
+DT051,Đề tài nghiên cứu 051,Blockchain,SV085,Đang thực hiện
+DT052,Đề tài nghiên cứu 052,IoT,SV066,Tạm dừng
+DT053,Đề tài nghiên cứu 053,Data Science,SV080,Hoàn thành
+DT054,Đề tài nghiên cứu 054,AI,SV097,Đang thực hiện
+DT055,Đề tài nghiên cứu 055,Data Science,SV040,Đang thực hiện
+DT056,Đề tài nghiên cứu 056,Blockchain,SV019,Đang thực hiện
+DT057,Đề tài nghiên cứu 057,AI,SV032,Hoàn thành
+DT058,Đề tài nghiên cứu 058,Web,SV099,Đang thực hiện
+DT059,Đề tài nghiên cứu 059,Digital Twin,SV054,Tạm dừng
+DT060,,Web,SV025,Tạm dừng
+DT061,Đề tài nghiên cứu 061,Data Science,SV050,Hoàn thành
+DT062,Đề tài nghiên cứu 062,Digital Twin,SV032,Đang thực hiện
+DT063,Đề tài nghiên cứu 063,Data Science,SV089,Đang thực hiện
+DT064,Đề tài nghiên cứu 064,AI,SV100,Hoàn thành
+DT065,Đề tài nghiên cứu 065,Blockchain,SV023,Tạm dừng
+DT066,Đề tài nghiên cứu 066,Web,SV060,Đang thực hiện
+DT067,Đề tài nghiên cứu 067,Web,SV032,Đang thực hiện
+DT068,Đề tài nghiên cứu 068,Digital Twin,SV018,Hoàn thành
+DT069,Đề tài nghiên cứu 069,Data Science,SV068,Tạm dừng
+DT070,Đề tài nghiên cứu 070,Web,SV041,Hoàn thành
+DT071,Đề tài nghiên cứu 071,Web,SV093,Tạm dừng
+DT072,Đề tài nghiên cứu 072,Digital Twin,SV071,Hoàn thành
+DT073,Đề tài nghiên cứu 073,Blockchain,SV096,Hoàn thành
+DT074,Đề tài nghiên cứu 074,Digital Twin,SV034,Đang thực hiện
+DT075,Đề tài nghiên cứu 075,Data Science,SV036,Tạm dừng
+DT076,Đề tài nghiên cứu 076,Digital Twin,SV081,Đang thực hiện
+DT077,Đề tài nghiên cứu 077,IoT,SV057,Đang thực hiện
+DT078,Đề tài nghiên cứu 078,Data Science,SV037,Đang thực hiện
+DT079,Đề tài nghiên cứu 079,IoT,SV043,Hoàn thành
+DT080,Đề tài nghiên cứu 080,Web,SV011,Đang thực hiện
