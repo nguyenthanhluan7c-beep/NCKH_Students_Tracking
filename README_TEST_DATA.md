@@ -1,0 +1,1 @@
+Bộ test gồm 3 CSV: students 100 dòng, projects 80 dòng, progress 150 dòng. Có cố ý cài lỗi whitespace, thiếu dữ liệu, sai kiểu, trùng ID, ID không tồn tại, progress ngoài 0-100 và score ngoài 0-10 để test Cleaning/Validation/Set/Statistics/Streamlit.
