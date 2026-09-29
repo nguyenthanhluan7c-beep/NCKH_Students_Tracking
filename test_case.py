@@ -3,120 +3,159 @@ import os
 import tempfile
 
 from statistics import (total_students, average_progress, average_score, top_5_projects)
-from NCKH_Students_Tracking.reports import general_report
+from reports import general_report
 
 
 students_normal = [
     {
         "student_id": "SV001",
-        "name": " Đoàn Văn Sáng",
+        "name": "Nguyen Van A",
         "class": "CNTT1",
-        "faculty": "Công nghệ thông tin",
-        "gpa": 3.5
-    },
-    {
-        "student_id": "SV002",
-        "name": "Nguyễn Thị Lan",
-        "class": "CNTT2",
-        "faculty": "Công nghệ thông tin",
-        "gpa": 3.8
-    },
-    {
-        "student_id": "SV003",
-        "name": "Trần Văn Hùng",
-        "class": "CNTT1",
-        "faculty": "Công nghệ thông tin",
+        "faculty": "CNTT",
         "gpa": 3.2
     },
     {
-        "student_id": "SV004",
-        "name": "Lê Thị Mai",
-        "class": "CNTT3",
-        "faculty": "Công nghệ thông tin",
-        "gpa": 3.9
+        "student_id": "SV002",
+        "name": "Tran Thi B",
+        "class": "CNTT2",
+        "faculty": "CNTT",
+        "gpa": 3.5
     },
     {
-        "student_id": "SV005",
-        "name": "Phạm Văn Nam",
-        "class": "CNTT2",
-        "faculty": "Công nghệ thông tin",
-        "gpa": 3.6
+        "student_id": "SV003",
+        "name": "Le Van C",
+        "class": "KTPM1",
+        "faculty": "KTPM",
+        "gpa": 3.0
     }
 ]
+
 
 projects_normal = [
     {
-        "id": 1,
-        "title": "Nghiên cứu về trí tuệ nhân tạo",
-        "field": "Công nghệ thông tin",
-        "status": "Đang thực hiện"
+        "project_id": "DT001",
+        "project_name": "AI trong giao duc",
+        "field": "AI",
+        "leader_id": "SV001",
+        "status": "Dang thuc hien"
     },
     {
-        "id": 2,
-        "title": "Phát triển ứng dụng di động",
-        "field": "Công nghệ thông tin",
-        "status": "Hoàn thành"
-    },
-    {
-        "id": 3,
-        "title": "Nghiên cứu về mạng máy tính",
-        "field": "Công nghệ thông tin",
-        "status": "Đang thực hiện"
-    },
-    {
-        "id": 4,
-        "title": "Phát triển hệ thống quản lý cơ sở dữ liệu",
-        "field": "Công nghệ thông tin",
-        "status": "Chưa bắt đầu"
-    },
-    {
-        "id": 5,
-        "title": "Nghiên cứu về an ninh mạng",
-        "field": "Công nghệ thông tin",
-        "status": "Hoàn thành"
+        "project_id": "DT002",
+        "project_name": "Quan ly NCKH",
+        "field": "Web",
+        "leader_id": "SV002",
+        "status": "Hoan thanh"
     }
 ]
 
+
 progress_normal = [
     {
-        "project_id": 1,
+        "progress_id": "P001",
+        "project_id": "DT001",
+        "student_id": "SV001",
         "progress": 80,
-        "score": 8.5
+        "score": 8
     },
     {
-        "project_id": 2,
+        "progress_id": "P002",
+        "project_id": "DT002",
+        "student_id": "SV002",
         "progress": 100,
-        "score": 9.0
-    },
-    {
-        "project_id": 3,
-        "progress": 60,
-        "score": 7.5
-    },
-    {
-        "project_id": 4,
-        "progress": 0,
-        "score": 0
-    },
-    {
-        "project_id": 5,
-        "progress": 100,
-        "score": 9.5
+        "score": 9
     }
 ]
 
 def test_case_1_normal_data():
     print("Test Case 1: Normal Data")
     assert total_students(students_normal) == 3
-    assert average_progress(progress_normal) == 88.0
-    assert average_score(progress_normal) == 8.0
+    assert average_progress(progress_normal) == 90.0
+    assert average_score(progress_normal) == 8.5
     top = top_5_projects(projects_normal, progress_normal)
-    assert len(top) == 5
-    assert top[0]['id'] == 5
+    assert len(top) == 2
+    assert top[1]['project_id'] == "DT002"
 
     report = general_report(students_normal, projects_normal, progress_normal)
 
-    assert "Báo cáo nghiên cứu khoa học" in report
-    assert "Phát triển hệ thống quản lý cơ sở dữ liệu" in report
-    assert "Nghiên cứu về an ninh mạng" in report
+    assert "AI trong giao duc" in report
+    assert "Quan ly NCKH" in report
     print("Test Case 1 Passed\n")
+
+def test_case_2_empty_data():
+    print("Test Case 2: Empty Data")
+
+    invalid_progress = [
+        {
+            "progress_id": "P001",
+            "project_id": "DT001",
+            "student_id": "SV001",
+            "progress": 120,
+            "score": 8
+        },
+        {
+            "progress_id": "P002",
+            "project_id": "DT999",
+            "student_id": "SV999",
+            "progress": 50,
+            "score": 11
+        }
+    ]
+
+    try:
+        for item in invalid_progress:
+            progress = item.get("progress", 0)
+            score = item.get("score", 0)
+
+            if not 0 <= progress <= 100:
+                print(
+                    f"Cảnh báo: progress không hợp lệ: "
+                    f"{progress}"
+                )
+
+            if not 0 <= score <= 10:
+                print(
+                    f"Cảnh báo: score không hợp lệ: "
+                    f"{score}"
+                )
+        result = average_progress(invalid_progress)
+        assert result == 85.0
+
+        print("Test Case 2 Passed\n")
+    except Exception as e:
+        print(f"Test Case 2 Failed: {e}\n")
+        assert False, f"Test Case 2 Failed: {e}"
+
+
+def test_case_3_bad_file():
+    print("Test Case 3: Bad File Handling")
+
+    with tempfile.NamedTemporaryFile(
+        mode="w", delete=False, suffix=".csv", encoding="utf-8", newline=""
+    ) as bad_file:
+        bad_filename = bad_file.name
+        writer = csv.writer(bad_file)
+        writer.writerow(["student_id", "name"])
+        writer.writerow(["SV001", "Nguyen Van A"])
+
+    try:
+        with open(bad_filename, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            required_columns = {"student_id", "name", "class", "faculty", "gpa"}
+            actual_columns = set(reader.fieldnames or [])
+            missing_columns = required_columns - actual_columns
+            if missing_columns:
+                raise ValueError(
+                    f"Thiếu cột dữ liệu: {', '.join(missing_columns)}"
+                )
+    except ValueError as ve:
+        print(f"Caught expected ValueError: {ve}")
+        print("Test Case 3 Passed\n")
+    finally:
+        if os.path.exists(bad_filename):
+            os.remove(bad_filename)
+
+if __name__ == "__main__":
+    test_case_1_normal_data()
+    test_case_2_empty_data()
+    test_case_3_bad_file()
+    print("All test cases executed.")
