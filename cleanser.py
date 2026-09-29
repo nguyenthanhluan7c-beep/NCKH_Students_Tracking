@@ -2,11 +2,8 @@ import csv
 import os
 
 MISSING = {"", "n/a", "na", "null", "none", "-", "?"}
-
-
 # ---------- 1. Đọc file ----------
 def read_csv(path):
-    """Đọc CSV -> list các dict. Lỗi file thì in thông báo và trả về []."""
     try:
         with open(path, encoding="utf-8-sig", newline="") as f:
             return list(csv.DictReader(f))
@@ -19,7 +16,6 @@ def read_csv(path):
 
 # ---------- 2. Hàm làm sạch từng kiểu dữ liệu ----------
 def strip_spaces(text):
-    """'  Nguyễn   Văn  An ' -> 'Nguyễn Văn An' (bỏ đầu/cuối, gộp khoảng trắng giữa)."""
     return " ".join(str(text).split())
 
 
@@ -94,7 +90,6 @@ PROGRESS_RULES = {
 PROGRESS_REQUIRED = {"progress_id", "project_id", "student_id", "progress", "score"}
 
 def clean_record(raw, rules, required):
-    """raw dict -> (record_sạch, list_lỗi)."""
     record, errors = {}, []
     for col, func in rules.items():
         value = raw.get(col)
@@ -125,7 +120,6 @@ def clean_all(rows, rules, required):
     return valid, invalid
 
 def print_table(title, rows, columns):
-    """In dữ liệu dạng bảng có căn cột."""
     print(f"\n{title}")
     if not rows:
         print("  (không có dữ liệu)")
@@ -143,7 +137,6 @@ def print_table(title, rows, columns):
 
 
 def show_invalid(title, invalid):
-    """In bảng các dòng lỗi: số dòng + lỗi."""
     items = [{"Dòng": b["line"], "Lỗi": "; ".join(b["errors"])} for b in invalid]
     print_table(title, items, ["Dòng", "Lỗi"])
 
