@@ -141,7 +141,6 @@ def show_invalid(title, invalid):
     print_table(title, items, ["Dòng", "Lỗi"])
 
 def load_all(data_dir):
-    """Trả về Dictionary: {'students': (valid, invalid), 'projects': ..., 'progress': ...}."""
     specs = {
         "students": ("students.csv", STUDENT_RULES, STUDENT_REQUIRED),
         "projects": ("projects.csv", PROJECT_RULES, PROJECT_REQUIRED),
