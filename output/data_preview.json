@@ -1,0 +1,12 @@
+{
+  "student_count": 100,
+  "project_count": 80,
+  "progress_count": 150,
+  "student_id_set_size": 99,
+  "project_id_set_size": 79,
+  "first_project_summary": [
+    "DT001",
+    "Đề tài nghiên cứu 001",
+    "Tạm dừng"
+  ]
+}
