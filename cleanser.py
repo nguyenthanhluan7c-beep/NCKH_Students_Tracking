@@ -1,4 +1,5 @@
 import csv
+import math
 import os
 
 MISSING = {"", "n/a", "na", "null", "none", "-", "?"}
@@ -50,11 +51,17 @@ def clean_faculty(text):
 
 def to_float(text):
     """'8,5' / ' 8.5 ' -> 8.5 ; sai -> raise ValueError."""
-    return float(strip_spaces(text).replace(",", "."))
+    value = float(strip_spaces(text).replace(",", "."))
+    if not math.isfinite(value):
+        raise ValueError("Giá trị phải là số hữu hạn.")
+    return value
 
 
 def to_int(text):
-    return int(float(strip_spaces(text).replace(",", ".")))
+    value = to_float(text)
+    if not value.is_integer():
+        raise ValueError("Giá trị phải là số nguyên.")
+    return int(value)
 
 
 def split_tags(text, sep=";"):
@@ -106,18 +113,28 @@ def clean_record(raw, rules, required):
     return record, errors
 
 def clean_all(rows, rules, required):
-    
     valid, invalid = [], []
-    for line_no, raw in enumerate(rows, start=2):       
-        try:
-            record, errors = clean_record(raw, rules, required)
-        except Exception as e:                            
-            record, errors = {}, [f"Lỗi không xác định: {e}"]
+    for line_no, raw in enumerate(rows, start=2):
+        record, errors = clean_record(raw, rules, required)
         if errors:
             invalid.append({"line": line_no, "raw": raw, "record": record, "errors": errors})
         else:
             valid.append(record)
     return valid, invalid
+
+
+DATA_SPECS = {
+    "students": (STUDENT_RULES, STUDENT_REQUIRED),
+    "projects": (PROJECT_RULES, PROJECT_REQUIRED),
+    "progress": (PROGRESS_RULES, PROGRESS_REQUIRED),
+}
+
+
+def clean_all_data(data):
+    cleaned, invalid = {}, {}
+    for name, (rules, required) in DATA_SPECS.items():
+        cleaned[name], invalid[name] = clean_all(data.get(name, []), rules, required)
+    return cleaned, invalid
 
 def print_table(title, rows, columns):
     print(f"\n{title}")
@@ -154,6 +171,9 @@ def load_all(data_dir):
 
 
 if __name__ == "__main__":
+    from console import configure_console_encoding
+
+    configure_console_encoding()
     data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
     for name, (valid, invalid) in load_all(data_dir).items():
         print(f"\n=== {name}: {len(valid)} hợp lệ, {len(invalid)} lỗi ===")

@@ -1,66 +1,125 @@
-from pathlib import Path
+from io import BytesIO
+
 import pandas as pd
 import streamlit as st
 
-BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / 'data'
+from cleanser import clean_all_data
+from statistics import calculate_all_statistics
+from validator import validate_data
+
+CSV_COLUMNS = {
+    'students': {'student_id', 'name', 'class', 'faculty', 'gpa'},
+    'projects': {'project_id', 'project_name', 'field', 'leader_id', 'status'},
+    'progress': {'progress_id', 'project_id', 'student_id', 'progress', 'score', 'result'},
+}
 
 st.set_page_config(page_title='Theo dõi NCKH sinh viên', page_icon='📚', layout='wide')
 
 
-@st.cache_data
-def load_csv(path: str) -> pd.DataFrame:
-    return pd.read_csv(path, encoding='utf-8-sig')
-
-
-def safe_load(name: str) -> pd.DataFrame:
-    path = DATA_DIR / f'{name}.csv'
-    if not path.exists():
-        return pd.DataFrame()
+def parse_uploaded_csv(content: bytes, file_name: str, data_name: str) -> list[dict]:
+    expected_columns = CSV_COLUMNS.get(data_name)
+    if expected_columns is None:
+        raise ValueError(f'Loại dữ liệu không được hỗ trợ: {data_name}')
     try:
-        return load_csv(str(path))
-    except Exception as error:
-        st.error(f'Không thể đọc {path.name}: {error}')
-        return pd.DataFrame()
+        frame = pd.read_csv(BytesIO(content), encoding='utf-8-sig')
+    except (UnicodeDecodeError, pd.errors.ParserError, pd.errors.EmptyDataError, ValueError) as error:
+        raise ValueError(f'Không thể đọc {file_name}: {error}') from error
+
+    frame.columns = [str(column).strip() for column in frame.columns]
+    missing_columns = expected_columns - set(frame.columns)
+    if missing_columns:
+        columns = ', '.join(sorted(missing_columns))
+        raise ValueError(f'{file_name} thiếu cột bắt buộc: {columns}.')
+    return dataframe_to_records(frame)
 
 
 def dataframe_to_records(df):
-    return [] if df.empty else df.to_dict(orient='records')
+    if df.empty:
+        return []
+    return df.astype(object).where(pd.notna(df), None).to_dict(orient='records')
 
 
-def prepare_pipeline():
-    students = safe_load('students')
-    projects = safe_load('projects')
-    progress = safe_load('progress')
-    data = {
-        'students': dataframe_to_records(students),
-        'projects': dataframe_to_records(projects),
-        'progress': dataframe_to_records(progress),
+def prepare_pipeline(raw_data: dict[str, list[dict]]):
+    data, cleaning_issues = clean_all_data(raw_data)
+    validation = validate_data(data, cleaning_issues)
+    statistics = calculate_all_statistics(data)
+    frames = {name: pd.DataFrame(rows) for name, rows in data.items()}
+    return (
+        frames['students'],
+        frames['projects'],
+        frames['progress'],
+        validation,
+        statistics,
+    )
+
+
+def upload_and_analyze():
+    with st.form('csv_analysis_form'):
+        st.subheader('📤 Tải lên dữ liệu CSV')
+        st.caption('Chọn đủ ba file CSV rồi bấm “Phân tích dữ liệu”. File chỉ được xử lý trong phiên này.')
+        columns = st.columns(3)
+        uploaded_files = {}
+        for column, (name, label) in zip(
+            columns,
+            (
+                ('students', 'Sinh viên'),
+                ('projects', 'Đề tài'),
+                ('progress', 'Tiến độ'),
+            ),
+        ):
+            with column:
+                uploaded_files[name] = st.file_uploader(
+                    f'CSV {label}',
+                    type='csv',
+                    key=f'{name}_csv',
+                )
+        submitted = st.form_submit_button(
+            'Phân tích dữ liệu',
+            type='primary',
+            key='analyze_csv_button',
+        )
+
+    if not submitted:
+        return
+
+    st.session_state.pop('analysis_result', None)
+    st.session_state.pop('analysis_files', None)
+    missing_files = [
+        name for name, uploaded_file in uploaded_files.items()
+        if uploaded_file is None
+    ]
+    if missing_files:
+        labels = {
+            'students': 'sinh viên',
+            'projects': 'đề tài',
+            'progress': 'tiến độ',
+        }
+        missing_labels = ', '.join(labels[name] for name in missing_files)
+        st.error(f'Vui lòng tải lên các file CSV còn thiếu: {missing_labels}.')
+        return
+
+    try:
+        raw_data = {
+            name: parse_uploaded_csv(
+                uploaded_files[name].getvalue(),
+                uploaded_files[name].name,
+                name,
+            )
+            for name in CSV_COLUMNS
+        }
+    except ValueError as error:
+        st.error(str(error))
+        return
+
+    st.session_state['analysis_result'] = prepare_pipeline(raw_data)
+    st.session_state['analysis_files'] = {
+        name: uploaded_files[name].name for name in CSV_COLUMNS
     }
-
-    try:
-        from cleaners import clean_all_data
-        data = clean_all_data(data)
-    except (ImportError, AttributeError):
-        pass
-
-    try:
-        from validators import validate_all
-        validation = validate_all(data)
-    except (ImportError, AttributeError):
-        validation = {'valid': True, 'errors': [], 'warnings': []}
-
-    try:
-        from statistics import calculate_all_statistics
-        statistics = calculate_all_statistics(data)
-    except (ImportError, AttributeError):
-        statistics = {}
-
-    return students, projects, progress, validation, statistics
 
 
 def show_overview(students, projects, progress):
     values = pd.to_numeric(progress.get('progress', pd.Series(dtype=float)), errors='coerce').dropna()
+    values = values[values.between(0, 100)]
     avg = values.mean() if not values.empty else 0
     c1, c2, c3, c4 = st.columns(4)
     c1.metric('👨‍🎓 Sinh viên', len(students))
@@ -92,7 +151,7 @@ def show_projects(projects):
         if selected != 'Tất cả':
             filtered = filtered[filtered['field'].astype(str) == selected]
 
-    st.dataframe(filtered, use_container_width=True, hide_index=True)
+    st.dataframe(filtered, width='stretch', hide_index=True)
 
 
 def show_progress(progress):
@@ -104,6 +163,7 @@ def show_progress(progress):
     chart = progress.copy()
     chart['progress'] = pd.to_numeric(chart['progress'], errors='coerce')
     chart = chart.dropna(subset=['progress'])
+    chart = chart[chart['progress'].between(0, 100)]
     if chart.empty:
         st.warning('Không có giá trị progress hợp lệ.')
         return
@@ -146,7 +206,11 @@ def show_statistics(statistics):
         cols = st.columns(4)
         for col, (key, value) in zip(cols, items[start:start + 4]):
             with col:
-                st.metric(str(key), f'{value:.2f}' if isinstance(value, float) else value)
+                if isinstance(value, (int, float)):
+                    st.metric(str(key), f'{value:.2f}' if isinstance(value, float) else value)
+                else:
+                    st.write(f'**{key}**')
+                    st.json(value)
 
 
 def main():
@@ -154,17 +218,25 @@ def main():
     st.caption('FIT4018 – Lập trình Python | Nhóm 3 – Chủ đề 12')
 
     st.sidebar.header('⚙️ Điều khiển')
-    if st.sidebar.button('🔄 Tải lại dữ liệu'):
-        st.cache_data.clear()
+    if st.sidebar.button('🧹 Xóa kết quả phân tích'):
+        st.session_state.pop('analysis_result', None)
+        st.session_state.pop('analysis_files', None)
         st.rerun()
-    st.sidebar.info('Quản lý sinh viên, đề tài, tiến độ và kết quả nghiên cứu khoa học.')
+    st.sidebar.info('Tải lên ba file CSV để bắt đầu phân tích.')
 
-    students, projects, progress, validation, statistics = prepare_pipeline()
+    upload_and_analyze()
+    analysis = st.session_state.get('analysis_result')
+    if analysis is None:
+        st.info('Tải lên đủ ba file CSV và bấm “Phân tích dữ liệu” để xem kết quả.')
+        return
 
+    students, projects, progress, validation, statistics = analysis
     if students.empty and projects.empty and progress.empty:
-        st.error('Chưa có dữ liệu CSV. Đặt 3 file vào thư mục data/.')
-        st.stop()
+        st.error('Các file CSV không có bản ghi dữ liệu hợp lệ.')
+        return
 
+    source_files = st.session_state.get('analysis_files', {})
+    st.caption('Đang phân tích: ' + ', '.join(source_files.values()))
     tab1, tab2, tab3, tab4 = st.tabs(['🏠 Tổng quan', '🔬 Đề tài', '📊 Tiến độ', '⚠️ Kiểm tra dữ liệu'])
     with tab1:
         show_overview(students, projects, progress)

@@ -1,3 +1,6 @@
+import math
+
+
 def get_ids(records, key):
     return {r[key] for r in records if r.get(key)}
 
@@ -53,7 +56,9 @@ def find_out_of_range(records, field, low, high, key):
     bad = []
     for r in records:
         v = r.get(field)
-        if isinstance(v, (int, float)) and not (low <= v <= high):
+        if isinstance(v, (int, float)) and (
+            not math.isfinite(v) or not (low <= v <= high)
+        ):
             bad.append((r.get(key), v))
     return bad
 
@@ -105,6 +110,42 @@ def validate_all(students, projects, progress, students_bad=(), projects_bad=())
         "sinh_vien_khong_tham_gia": student_ids - get_ids(progress, "student_id"),
     }
 
+
+def validate_data(data, cleaning_issues=None):
+    cleaning_issues = cleaning_issues or {}
+    report = validate_all(
+        data.get("students", []),
+        data.get("projects", []),
+        data.get("progress", []),
+        students_bad=cleaning_issues.get("students", []),
+        projects_bad=cleaning_issues.get("projects", []),
+    )
+    errors, warnings = [], []
+    warning_sections = {"thieu_truong", "sinh_vien_khong_tham_gia"}
+
+    for section, contents in report.items():
+        if isinstance(contents, dict):
+            for label, items in contents.items():
+                if not items:
+                    continue
+                message = f"{label}: {items}"
+                (warnings if section in warning_sections else errors).append(message)
+        elif contents:
+            warnings.append(f"{section}: {contents}")
+
+    for name, issues in cleaning_issues.items():
+        for issue in issues:
+            errors.append(
+                f"{name}, dòng {issue['line']}: {'; '.join(issue['errors'])}"
+            )
+
+    return {
+        "valid": not errors,
+        "errors": errors,
+        "warnings": warnings,
+        "details": report,
+    }
+
 def print_report(report):
     """In báo cáo validate_all() dễ đọc."""
     for section, content in report.items():
@@ -118,8 +159,10 @@ def print_report(report):
 
 if __name__ == "__main__":
     import os
-    from cleaners import load_all
+    from cleanser import load_all
+    from console import configure_console_encoding
 
+    configure_console_encoding()
     data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
     data = load_all(data_dir)
     (s, s_bad), (p, p_bad), (g, _) = data["students"], data["projects"], data["progress"]
