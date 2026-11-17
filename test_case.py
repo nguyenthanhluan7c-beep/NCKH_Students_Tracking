@@ -2,8 +2,16 @@ import csv
 import os
 import tempfile
 
-from statistics import (total_students, average_progress, average_score, top_5_projects)
+from cleanser import clean_all, to_float, to_int
+from statistics import (
+    total_students,
+    participating_students,
+    average_progress,
+    average_score,
+    top_5_projects,
+)
 from reports import general_report
+from validator import find_duplicates, find_out_of_range
 
 
 students_normal = [
@@ -69,61 +77,76 @@ progress_normal = [
 def test_case_1_normal_data():
     print("Test Case 1: Normal Data")
     assert total_students(students_normal) == 3
+    assert participating_students(students_normal, progress_normal) == 2
     assert average_progress(progress_normal) == 90.0
     assert average_score(progress_normal) == 8.5
     top = top_5_projects(projects_normal, progress_normal)
     assert len(top) == 2
-    assert top[1]['project_id'] == "DT002"
+    assert top[0]['project_id'] == "DT002"
+    assert top[1]['project_id'] == "DT001"
+    duplicate_project = dict(projects_normal[0], project_name="Duplicate project row")
+    top_with_duplicate = top_5_projects(
+        projects_normal + [duplicate_project], progress_normal
+    )
+    assert [item['project_id'] for item in top_with_duplicate] == ["DT002", "DT001"]
 
     report = general_report(students_normal, projects_normal, progress_normal)
 
     assert "AI trong giao duc" in report
     assert "Quan ly NCKH" in report
+    assert "Tổng số sinh viên tham gia nghiên cứu khoa học: 2" in report
     print("Test Case 1 Passed\n")
 
 def test_case_2_empty_data():
-    print("Test Case 2: Empty Data")
-
-    invalid_progress = [
-        {
-            "progress_id": "P001",
-            "project_id": "DT001",
-            "student_id": "SV001",
-            "progress": 120,
-            "score": 8
-        },
-        {
-            "progress_id": "P002",
-            "project_id": "DT999",
-            "student_id": "SV999",
-            "progress": 50,
-            "score": 11
-        }
+    print("Test Case 2: Empty and malformed data")
+    assert total_students([]) == 0
+    assert average_progress([]) == 0
+    assert average_score([]) == 0
+    assert top_5_projects([], []) == []
+    out_of_range_progress = [
+        {"progress": 120, "score": 11},
+        {"progress": -1, "score": -1},
+        {"progress": 50, "score": 8},
     ]
+    assert average_progress(out_of_range_progress) == 50
+    assert average_score(out_of_range_progress) == 8
 
+    duplicates = find_duplicates(
+        [{"student_id": "SV001"}, {"student_id": "SV001"}], "student_id"
+    )
+    assert duplicates == {"SV001"}
+    out_of_range = find_out_of_range(
+        [{"progress_id": "P001", "progress": 120}], "progress", 0, 100, "progress_id"
+    )
+    assert out_of_range == [("P001", 120)]
+    assert to_float("8,5") == 8.5
+    assert to_int("8") == 8
+    for invalid_number in ("abc", "nan", "inf"):
+        try:
+            to_float(invalid_number)
+        except ValueError:
+            continue
+        raise AssertionError(f"Expected ValueError for {invalid_number!r}")
     try:
-        for item in invalid_progress:
-            progress = item.get("progress", 0)
-            score = item.get("score", 0)
+        to_int("2.5")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected ValueError for non-integer input")
 
-            if not 0 <= progress <= 100:
-                print(
-                    f"Cảnh báo: progress không hợp lệ: "
-                    f"{progress}"
-                )
-
-            if not 0 <= score <= 10:
-                print(
-                    f"Cảnh báo: score không hợp lệ: "
-                    f"{score}"
-                )
-        result = average_progress(invalid_progress)
-        assert result == 85.0
-
-        print("Test Case 2 Passed\n")
-    except Exception as e:
-        print(f"Test Case 2 Failed: {e}\n")
-        assert False, f"Test Case 2 Failed: {e}"
+    cleaned, invalid = clean_all(
+        [{"student_id": "SV001", "name": "", "gpa": "3.2"}],
+        {
+            "student_id": lambda value: value,
+            "name": lambda value: value,
+            "gpa": to_float,
+        },
+        {"student_id", "name", "gpa"},
+    )
+    assert cleaned == []
+    assert invalid[0]["line"] == 2
+    assert "name" in invalid[0]["errors"][0]
+    print("Test Case 2 Passed\n")
 
 
 def test_case_3_bad_file():
@@ -154,8 +177,60 @@ def test_case_3_bad_file():
         if os.path.exists(bad_filename):
             os.remove(bad_filename)
 
+
+def test_case_4_csv_upload():
+    from pathlib import Path
+    from streamlit.testing.v1 import AppTest
+
+    app = AppTest.from_file(Path(__file__).with_name("app.py")).run()
+    app.button(key="analyze_csv_button").click().run()
+    assert not app.exception
+    assert app.error
+
+    uploads = {
+        "students_csv": (
+            "students.csv",
+            b"student_id,name,class,faculty,gpa\nSV001,Student One,C1,CNTT,3.5\n",
+        ),
+        "projects_csv": (
+            "projects.csv",
+            "project_id,project_name,field,leader_id,status\n"
+            "DT001,Project One,AI,SV001,Đang thực hiện\n".encode("utf-8"),
+        ),
+        "progress_csv": (
+            "progress.csv",
+            "progress_id,project_id,student_id,progress,score,result\n"
+            "PG001,DT001,SV001,50,8,Tốt\n".encode("utf-8"),
+        ),
+    }
+    for key, (filename, content) in uploads.items():
+        app.file_uploader(key=key).set_value((filename, content, "text/csv"))
+    app.button(key="analyze_csv_button").click().run()
+
+    assert not app.exception
+    assert len(app.metric) == 8
+    assert len(app.session_state["analysis_result"][0]) == 1
+    assert app.session_state["analysis_files"] == {
+        key.removesuffix("_csv"): filename
+        for key, (filename, _) in uploads.items()
+    }
+
+    app.file_uploader(key="students_csv").set_value(
+        ("wrong.csv", b"wrong,columns\nvalue,value\n", "text/csv")
+    )
+    app.button(key="analyze_csv_button").click().run()
+    assert not app.exception
+    assert any("thiếu cột bắt buộc" in error.value.lower() for error in app.error)
+    assert "analysis_result" not in app.session_state
+    print("Test Case 4 Passed\n")
+
+
 if __name__ == "__main__":
+    from console import configure_console_encoding
+
+    configure_console_encoding()
     test_case_1_normal_data()
     test_case_2_empty_data()
     test_case_3_bad_file()
+    test_case_4_csv_upload()
     print("All test cases executed.")

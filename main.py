@@ -33,12 +33,8 @@ def read_csv(file_path: Path) -> list[dict]:
 def load_all_data() -> dict[str, list[dict]]:
     data = {}
     for name, path in CSV_FILES.items():
-        try:
-            data[name] = read_csv(path)
-            print(f'[OK] {name}: {len(data[name])} bản ghi')
-        except (FileNotFoundError, ValueError) as error:
-            print(f'[ERROR] {error}')
-            data[name] = []
+        data[name] = read_csv(path)
+        print(f'[OK] {name}: {len(data[name])} bản ghi')
     return data
 
 
@@ -71,40 +67,28 @@ def build_data_structures(data: dict[str, list[dict]]) -> dict:
 
 
 def run_cleaning(data):
-    try:
-        from cleaners import clean_all_data
-        return clean_all_data(data)
-    except (ImportError, AttributeError):
-        print('[INFO] Chưa có cleaners.py hoặc clean_all_data().')
-        return data
+    from cleanser import clean_all_data
+
+    return clean_all_data(data)
 
 
-def run_validation(data):
-    try:
-        from validators import validate_all
-        return validate_all(data)
-    except (ImportError, AttributeError):
-        print('[INFO] Chưa có validators.py hoặc validate_all().')
-        return {'valid': True, 'errors': [], 'warnings': []}
+def run_validation(data, cleaning_issues):
+    from validator import validate_data
 
+    return validate_data(data, cleaning_issues)
 
 def run_statistics(data):
-    try:
-        from statistics import calculate_all_statistics
-        return calculate_all_statistics(data)
-    except (ImportError, AttributeError):
-        print('[INFO] Chưa có statistics.py hoặc calculate_all_statistics().')
-        return {}
+    from statistics import calculate_all_statistics
+
+    return calculate_all_statistics(data)
 
 
 def run_report(data, validation, statistics):
-    try:
-        from reports import generate_report
-        OUTPUT_DIR.mkdir(exist_ok=True)
-        generate_report(data, validation, statistics, OUTPUT_DIR / 'report.txt')
-        print('[OK] Đã tạo output/report.txt')
-    except (ImportError, AttributeError):
-        print('[INFO] Chưa có reports.py hoặc generate_report().')
+    from reports import generate_report
+
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    generate_report(data, validation, statistics, OUTPUT_DIR / 'report.txt')
+    print('[OK] Đã tạo output/report.txt')
 
 
 def save_preview(structures):
@@ -127,9 +111,9 @@ def main():
     print('=' * 60)
 
     data = load_all_data()
-    data = run_cleaning(data)
+    data, cleaning_issues = run_cleaning(data)
     structures = build_data_structures(data)
-    validation = run_validation(data)
+    validation = run_validation(data, cleaning_issues)
     statistics = run_statistics(data)
     run_report(data, validation, statistics)
     save_preview(structures)
@@ -140,8 +124,13 @@ def main():
     print(f"Tiến độ:   {len(structures['progress'])}")
     print(f"ID SV duy nhất: {len(structures['student_ids'])}")
     print(f"ID đề tài duy nhất: {len(structures['project_ids'])}")
+    print(f"Lỗi dữ liệu: {len(validation['errors'])}")
+    print(f"Cảnh báo:    {len(validation['warnings'])}")
     print('\n[OK] Pipeline hoàn tất.')
 
 
 if __name__ == '__main__':
+    from console import configure_console_encoding
+
+    configure_console_encoding()
     main()
