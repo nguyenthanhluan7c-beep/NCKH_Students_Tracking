@@ -1,0 +1,69 @@
+============================================================
+Báo cáo nghiên cứu khoa học
+============================================================
+Ngày báo cáo: 25/11/2026 00:54:02
+Tổng số sinh viên: 98
+Tổng số sinh viên tham gia nghiên cứu khoa học: 74
+------------------------------------------------------------
+Tổng số đề tài nghiên cứu khoa học theo lĩnh vực:
+------------------------------------------------------------
+Data Science: 16
+AI: 7
+Web: 17
+Blockchain: 12
+IoT: 14
+Unknown: 1
+Digital Twin: 12
+Tỉ lệ đề tài theo trạng thái:
+------------------------------------------------------------
+Tạm dừng: 32.91%
+Hoàn thành: 36.71%
+Đang thực hiện: 29.11%
+Chưa xác định: 1.27%
+Tiến độ trung bình:
+------------------------------------------------------------
+Tiến độ trung bình: 50.19%
+Điểm kết quả trung bình:
+------------------------------------------------------------
+Điểm kết quả trung bình: 7.3
+Top 5 đề tài có tiến độ cao nhất:
+------------------------------------------------------------
+1. Đề Tài Nghiên Cứu 008: 94.0%
+2. Đề Tài Nghiên Cứu 014: 85.5%
+3. Đề Tài Nghiên Cứu 016: 85.33%
+4. Đề Tài Nghiên Cứu 028: 84.0%
+5. Đề Tài Nghiên Cứu 066: 84.0%
+Sinh viên tham gia theo khoa:
+------------------------------------------------------------
+CNTT: 29
+Kinh tế: 30
+Cơ khí: 16
+Điện - Điện tử: 23
+============================================================
+Kết thúc báo cáo
+============================================================
+
+Kết quả kiểm tra dữ liệu
+============================================================
+Số lỗi: 13
+Số cảnh báo: 3
+
+Lỗi:
+- students: {'SV001'}
+- projects: {'DT001'}
+- progress: {'PG001'}
+- projects.leader_id -> students: {'SV040', 'SV999'}
+- progress.student_id -> students: {'SV040', 'SV999'}
+- progress.project_id -> projects: {'DT999', 'DT030'}
+- progress.progress (0-100): [('PG007', 120.0)]
+- progress.score (0-10): [('PG018', -1.0), ('PG092', 11.5)]
+- projects.status: [('DT045', 'Chưa xác định')]
+- students, dòng 13: Thiếu giá trị cột 'name'
+- students, dòng 26: Cột 'gpa' sai định dạng: 'abc'
+- projects, dòng 61: Thiếu giá trị cột 'project_name'
+- progress, dòng 57: Cột 'progress' sai định dạng: 'abc'
+
+Cảnh báo:
+- projects: [('DT010', {'field'})]
+- progress: [('PG112', {'result'})]
+- sinh_vien_khong_tham_gia: {'SV012', 'SV072', 'SV009', 'SV010', 'SV026', 'SV021', 'SV082', 'SV064', 'SV041', 'SV013', 'SV068', 'SV052', 'SV050', 'SV011', 'SV074', 'SV092', 'SV027', 'SV035', 'SV024', 'SV099', 'SV080', 'SV020', 'SV067', 'SV025', 'SV048'}
